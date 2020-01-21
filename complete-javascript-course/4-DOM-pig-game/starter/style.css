@@ -9,6 +9,16 @@
     
 }
 
+#inputScore {
+    font-family: Lato;
+    font-size: 18px;
+    text-align: center;
+    padding: 10px;
+    position: absolute;
+    bottom: 50px;
+    left: 40%;
+}
+
 .clearfix::after {
     content: "";
     display: table;
