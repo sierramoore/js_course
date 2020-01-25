@@ -133,14 +133,14 @@ var designerQuestion = interviewQuestion('designer');
 // CLOSURES ///////////////////////////////////////////
 // is an  inner function  that has access to the variables and parameters of its outer function, even after the outer function has returned
 
-function retirement(retirementAge) {
-    const a = ' years left until retirement';
-
-    return function(yearOfBirth) { // running inner anonymus function that is already executed and returned -- yet using param and var below
-        let age = 2020 - yearOfBirth;
-        console.log((retirementAge - age) + a) // using a param and variable above
-    }
-}
+// function retirement(retirementAge) {
+//     const a = ' years left until retirement';
+//
+//     return function(yearOfBirth) { // running inner anonymus function that is already executed and returned -- yet using param and var below
+//         let age = 2020 - yearOfBirth;
+//         console.log((retirementAge - age) + a) // using a param and variable above
+//     }
+// }
 //
 // const retirementUS = retirement(66);
 // retirementUS(1990);
@@ -149,28 +149,29 @@ function retirement(retirementAge) {
 
 
 // another closure
-function interviewQuestion(job) {
-    let q1 = ', can you please explain what UX design is?';
-    let q2 = 'What subject do you teach, ';
-    let q3 = ', what do you do?';
-
-    return function(name) {
-        if (job === 'designer') {
-            console.log(name + q1);
-
-        } else if (job === 'teacher') {
-            console.log( q2 + name + '?');
-
-        } else {
-            console.log('Hello ' + name + q3);
-        }
-    }
-}
+// function interviewQuestion(job) {
+//     let q1 = ', can you please explain what UX design is?';
+//     let q2 = 'What subject do you teach, ';
+//     let q3 = ', what do you do?';
+//
+//     return function(name) {
+//         if (job === 'designer') {
+//             console.log(name + q1);
+//
+//         } else if (job === 'teacher') {
+//             console.log( q2 + name + '?');
+//
+//         } else {
+//             console.log('Hello ' + name + q3);
+//         }
+//     }
+// }
 
 // const abc = interviewQuestion('designer')('your name ');
 
 
 // BIND, CALL, APPLY /////////////////
+/*
 var john = {
     name: 'John',
     age: 26,
@@ -194,7 +195,7 @@ var emily = {
 john.presentation('formal', 'morning');
 
 // method borrowing
-// the call method allows you to set the 'this' variable
+// the call method allows you to set the 'this' variable do it in the first argument
 // we used johns presentation method but it changed all the attributes of this to emily
 john.presentation.call(emily, 'friendly', "afternoon");
 
@@ -237,5 +238,114 @@ const fullJapan = arrayCalc(ages, isFullAge.bind(this, 20));
 
 console.log(ages);
 console.log(fullJapan);
+
+*/
+
+/*
+--- Let's build a fun quiz game in the console! ---
+
+1. Build a function constructor called Question to describe a question. A question should include:
+a) question itself
+b) the answers from which the player can choose the correct one (choose an adequate data structure here, array, object, etc.)
+c) correct answer (I would use a number for this)
+
+2. Create a couple of questions using the constructor
+
+3. Store them all inside an array
+
+4. Select one random question and log it on the console, together with the possible answers (each question should have a number) (Hint: write a method for the Question objects for this task).
+
+5. Use the 'prompt' function to ask the user for the correct answer. The user should input the number of the correct answer such as you displayed it on Task 4.
+
+6. Check if the answer is correct and print to the console whether the answer is correct ot nor (Hint: write another method for this).
+
+7. Suppose this code would be a plugin for other programmers to use in their code. So make sure that all your code is private and doesn't interfere with the other programmers code (Hint: we learned a special technique to do exactly that).
+
+8. After you display the result, display the next random question, so that the game never ends (Hint: write a function for this and call it right after displaying the result)
+
+9. Be careful: after Task 8, the game literally never ends. So include the option to quit the game if the user writes 'exit' instead of the answer. In this case, DON'T call the function from task 8.
+
+10. Track the user's score to make the game more fun! So each time an answer is correct, add 1 point to the score (Hint: I'm going to use the power of closures for this, but you don't have to, just do this with the tools you feel more comfortable at this point).
+
+11. Display the score in the console. Use yet another method for this.
+
+*/
+
+
+(function(){
+    // const questions = ['what is up?', 'what color is the sky?', 'who is the best?'];
+    // const answers = ['sky', 'blue', 'romchick'];
+    // let score = 0;
+    //
+    // function randomArray(arr) {
+    //     const rando =  Math.floor(Math.random() * Math.floor(arr.length));
+    //     return arr[rando]
+    // }
+    // let response = prompt('your answer');
+    //
+    // function determineAnswer() {
+    //     if(questions[0] && response === answers[0]) {
+    //         score ++;
+    //         console.log('Correcto you have ' + score + ' points');
+    //     } else if(questions[1] && response === answers[1]) {
+    //         score ++;
+    //         console.log('Correcto you have ' + score + ' points');
+    //     } else if(questions[2] && response === answers[2]) {
+    //         score ++;
+    //         console.log('Correcto you have ' + score + ' points')
+    //     } else {
+    //         console.log('Nope you have ' + score + ' points')
+    //     }
+    // }
+    //
+    // function gamePlaying() {
+    //     if(response !== 'exit'){
+    //         console.log(randomArray(questions));
+    //         prompt('your answer');
+    //         determineAnswer();
+    //     } else {
+    //         console.log('done');
+    //     }
+    // }
+    //
+    // gamePlaying();
+    // determineAnswer();
+
+    // add score and keep q's coming
+    const Question = function (question, answers, correct) {
+        this.question = question;
+        this.answers = answers;
+        this.correct = correct;
+        this.promtQ = function () {
+            console.log(this.question);
+
+            for(let i=0; i < this.answers.length; i++) {
+                console.log(this.answers[i]);
+            }
+        };
+        this.isCorrect = function (response, answer) {
+            if(response === answer) {
+                console.log("correct :D")
+            } else {
+                console.log("wrong D:")
+            }
+        }
+    };
+
+    const q1 = new Question('what is up?', ['0: sky', '1: floor'], 0);
+    const q2 = new Question('what color is the sky?', ['0; blue', '1: pink'], 0);
+    const q3 = new Question('who is the best?', ['0: romchick', '1: me'], 0);
+    const questions = [q1, q2, q3];
+    const rando =  Math.floor(Math.random() * questions.length);
+
+    questions[rando].promtQ();
+    const response = prompt('your answer'); // comes back as string
+    questions[rando].isCorrect(parseInt(response), questions[rando].correct);
+}());
+
+
+
+
+
 
 
