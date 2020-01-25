@@ -273,49 +273,12 @@ c) correct answer (I would use a number for this)
 
 
 (function(){
-    // const questions = ['what is up?', 'what color is the sky?', 'who is the best?'];
-    // const answers = ['sky', 'blue', 'romchick'];
-    // let score = 0;
-    //
-    // function randomArray(arr) {
-    //     const rando =  Math.floor(Math.random() * Math.floor(arr.length));
-    //     return arr[rando]
-    // }
-    // let response = prompt('your answer');
-    //
-    // function determineAnswer() {
-    //     if(questions[0] && response === answers[0]) {
-    //         score ++;
-    //         console.log('Correcto you have ' + score + ' points');
-    //     } else if(questions[1] && response === answers[1]) {
-    //         score ++;
-    //         console.log('Correcto you have ' + score + ' points');
-    //     } else if(questions[2] && response === answers[2]) {
-    //         score ++;
-    //         console.log('Correcto you have ' + score + ' points')
-    //     } else {
-    //         console.log('Nope you have ' + score + ' points')
-    //     }
-    // }
-    //
-    // function gamePlaying() {
-    //     if(response !== 'exit'){
-    //         console.log(randomArray(questions));
-    //         prompt('your answer');
-    //         determineAnswer();
-    //     } else {
-    //         console.log('done');
-    //     }
-    // }
-    //
-    // gamePlaying();
-    // determineAnswer();
-
-    // add score and keep q's coming
+    // keep q's coming and exit
     const Question = function (question, answers, correct) {
         this.question = question;
         this.answers = answers;
         this.correct = correct;
+        this.score = 0;
         this.promtQ = function () {
             console.log(this.question);
 
@@ -325,7 +288,8 @@ c) correct answer (I would use a number for this)
         };
         this.isCorrect = function (response, answer) {
             if(response === answer) {
-                console.log("correct :D")
+                this.score++;
+                console.log("correct :D You have " + this.score + ' points!')
             } else {
                 console.log("wrong D:")
             }
@@ -338,9 +302,20 @@ c) correct answer (I would use a number for this)
     const questions = [q1, q2, q3];
     const rando =  Math.floor(Math.random() * questions.length);
 
-    questions[rando].promtQ();
-    const response = prompt('your answer'); // comes back as string
-    questions[rando].isCorrect(parseInt(response), questions[rando].correct);
+    questions[rando].promtQ(); // promts question and possible answers
+    const response = prompt('your answer'); // promts popup and answer comes back as string
+    questions[rando].isCorrect(parseInt(response), questions[rando].correct); // check and log if correct response
+
+
+    // while(response !== 'exit') {
+    //     questions[rando].promtQ();
+    //     const response = prompt('your answer');
+    //     questions[rando].isCorrect(parseInt(response), questions[rando].correct);
+    // }
+    // if(response === 'exit') {
+    //     console.log('okie bye')
+    // }
+
 }());
 
 
