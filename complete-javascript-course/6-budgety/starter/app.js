@@ -80,7 +80,7 @@ const UIController = (function() {
                 // will be exp or inc
                 type: document.querySelector(DOMstrings.inputType).value,
                 description: document.querySelector(DOMstrings.inputDescription).value,
-                value: document.querySelector(DOMstrings.inputValue).value
+                value: parseFloat(document.querySelector(DOMstrings.inputValue).value)
             }
         },
         addListItem: function(obj, type) {
@@ -108,6 +108,24 @@ const UIController = (function() {
             //beforeend - where we want to place it in html and 2nd what we want to be inserted
 
         },
+
+        clearFields: function() {
+            let fields, fieldsArr;
+
+            fields = document.querySelectorAll(DOMstrings.inputDescription + ', ' + DOMstrings.inputValue); // returns a list
+
+            //slice will create a copy of the list and return an array
+            // will trick slice method to thinking fields is an array (fields.slice() will not work)
+            fieldsArr = Array.prototype.slice.call(fields);
+            // now can loop and clear input fields from both des and val
+            fieldsArr.forEach(function (curValue, i, arr) {
+                curValue.value = ""; // clears with empty string
+            });
+
+            //reset type bar to description instead of value
+            fieldsArr[0].focus();
+        },
+
         // pass them down to controller
         getDOMstrings: function () {
             return DOMstrings;
@@ -133,21 +151,36 @@ const controller = (function(budgetCtrl, UICtrl) {
         })
     };
 
+    const updateBudget = function () {
+
+        //1. calc budget
+
+        //2. return the budget
+
+        // 3 display budget in ui
+
+    };
+
     const ctrlAddItem = function(){
         let input, newItem;
 
         // 1. get input data
         input = UICtrl.getInput(); // has obj of type, description, values
 
-        // 2. add the item to the budget controller
-        newItem = budgetCtrl.addItem(input.type, input.description, input.value);
+        if(input.description !== "" && !isNaN(input.value) && input.value > 0){
+            // 2. add the item to the budget controller
+            newItem = budgetCtrl.addItem(input.type, input.description, input.value);
 
-        // 3. add the new item to the UI
-        UICtrl.addListItem(newItem, input.type); //obj, type
+            // 3. add the new item to the UI
+            UICtrl.addListItem(newItem, input.type); //obj, type
 
-        // 4. calculate the budget
+            // 4. clear the input fields
+            UICtrl.clearFields();
 
-        // 5. display the budget on UI
+            // 5. calc and update budget
+            updateBudget();
+        }
+
     };
 
     //pulic init need now bc organized data into functions and not iief
