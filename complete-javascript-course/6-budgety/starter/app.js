@@ -8,6 +8,19 @@ const budgetController = (function () {
         this.id = id;
         this.description = description;
         this.value = value;
+        this.percentage = -1;
+    };
+    // calculator
+    Expense.prototype.calcPercentage = function (totalIncome) {
+        if(totalIncome > 0) { //if exists
+            this.percentage = Math.round(this.value / totalIncome) * 100;
+        } else {
+            this.percentage = -1;
+        }
+    };
+    // getter
+    Expense.prototype.getPercentage = function () {
+        return this.percentage;
     };
 
     const Income = function (id, description, value) {
@@ -69,8 +82,21 @@ const budgetController = (function () {
             return newItem;
         },
 
-        deleteItem: function(){
+        deleteItem: function(type, id){
+            let ids, index;
 
+            // if our array is like [2, 5, 6, 9] -> we cant say data.allItems[type][id].
+            // creates a new array of all the existing items and reorders them
+            ids = data.allItems[type].map(function(current){
+                return current.id; // has id, description, value props
+            });
+
+            index = ids.indexOf(id); // now index correlates to the correct item index in the array
+
+
+            if(index !== -1) { // if index exists
+                data.allItems[type].splice(index, 1); //delete said item
+            }
         },
 
         calculateBudget: function () {
@@ -92,6 +118,19 @@ const budgetController = (function () {
 
         },
 
+        calculatePercentages: function () {
+            data.allItems.exp.forEach(function (cur) {
+                cur.calcPercentage(data.totals.inc); //filling totalInc param in function
+            })
+        },
+
+        getPercentages: function (){
+            const allPercentages = data.allItems.exp.map(function (cur) {
+                return cur.getPercentage()
+            });
+            return allPercentages; //an array of all percentages
+        },
+
         //only retrieve data
         // this is where we create the obj that is going to be returned to the app controller which then passes it to the displayBudget method
         getBudget: function () {
@@ -101,6 +140,9 @@ const budgetController = (function () {
                 totalExp: data.totals.exp,
                 percentage: data.percentage
             }
+        },
+        testing: function () {
+            console.log(data);
         }
     }
 })(); //iief
@@ -121,7 +163,8 @@ const UIController = (function() {
         incomeLabel: '.budget__income--value',
         expensesLabel: '.budget__expenses--value',
         percentageLabel: '.budget__expenses--percentage',
-        container: '.container' // container of all inc and exp list
+        container: '.container', // container of all inc and exp list
+        expensesPercLabel: '.item__percentage',
     };
 
     return {
@@ -159,6 +202,12 @@ const UIController = (function() {
 
         },
 
+        deleteListItem: function (selectorID) {
+            //cant remove el in js need to get parent first then remove child
+            const el = document.getElementById(selectorID); //grab parent
+            el.parentNode.removeChild(el); //then remove child
+        },
+
         clearFields: function() {
             let fields, fieldsArr;
 
@@ -188,6 +237,25 @@ const UIController = (function() {
             } else {
                 document.querySelector(DOMstrings.percentageLabel).textContent = '--';
             }
+        },
+
+        displayPercentages: function (percentages) { //param will b an array of all %
+            const fields = document.querySelectorAll(DOMstrings.expensesPercLabel); // fields holds node list
+
+            // make reusable for other nodes --similar to forEach for arrays but for nodelist
+            const nodeListForEach = function(nodeList, callback) {
+                for(let i=0; i < nodeList.length; i++) { //node list doesnt have methods but has length prop
+                    callback(nodeList[i], i); //declaring this callback to have 2 future arguments. will expect to be passed 1-element and 2-index of it
+                }
+            };
+
+            nodeListForEach(fields, function(current, index) { // node list and looper
+                if(percentages[index] > 0) {
+                    current.textContent = percentages[index] + '%';
+                } else {
+                    current.textContent = "--"
+                }
+            })
         },
 
         // pass them down to controller
@@ -227,7 +295,20 @@ const controller = (function(budgetCtrl, UICtrl) {
         const budget= budgetCtrl.getBudget();
 
         // 3 display budget in ui
+        UICtrl.displayBudget(budget);
+    };
 
+    const updatePercentages = function () {
+
+        // 1 calc percentages
+        budgetCtrl.calculatePercentages();
+
+        // 2 read percentages from budget controller
+        const percentages = budgetCtrl.getPercentages();
+
+        // 3 update ui with new percentages
+        console.log(percentages);
+        UICtrl.displayPercentages(percentages);
 
     };
 
@@ -250,6 +331,9 @@ const controller = (function(budgetCtrl, UICtrl) {
 
             // 5. calc and update budget
             updateBudget();
+
+            // 6. calc and update percentages
+            updatePercentages();
         }
     };
 
@@ -264,13 +348,19 @@ const controller = (function(budgetCtrl, UICtrl) {
             // js can converts primitive to obj to use methods on them
             splitID = itemID.split('-'); // returns array from specified separator (ex: ['inc', '0'])
             type = splitID[0];
-            ID = splitID[1];
+            ID = parseInt(splitID[1]); // convert id from string to number
 
             // 1. delete item from data structure
+            budgetCtrl.deleteItem(type, ID);
 
             // 2. delete item from UI
+            UICtrl.deleteListItem(itemID);
 
             // 3. update and show new budget
+            updateBudget();
+
+            // 4. calc and update percentages
+            updatePercentages();
         }
     };
 
