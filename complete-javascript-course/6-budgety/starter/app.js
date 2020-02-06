@@ -11,12 +11,17 @@ const budgetController = (function () {
         this.percentage = -1;
     };
     // calculator
-    Expense.prototype.calcPercentage = function (totalIncome) {
-        if(totalIncome > 0) { //if exists
+    Expense.prototype.calcPercentage = function(totalIncome) {
+        // console.log(totalIncome);
+        // console.log(this.percentage);
+        // this.percentage = Math.round(this.value / totalIncome) * 100;
+        // console.log(this.percentage);
+        if (totalIncome > 0) {
             this.percentage = Math.round(this.value / totalIncome) * 100;
         } else {
             this.percentage = -1;
         }
+        // prob it turns to 0
     };
     // getter
     Expense.prototype.getPercentage = function () {
@@ -118,10 +123,11 @@ const budgetController = (function () {
 
         },
 
-        calculatePercentages: function () {
-            data.allItems.exp.forEach(function (cur) {
+        calculatePercentages: function() {
+
+            data.allItems.exp.forEach(function(cur) {
                 cur.calcPercentage(data.totals.inc); //filling totalInc param in function
-            })
+            });
         },
 
         getPercentages: function (){
@@ -256,6 +262,30 @@ const UIController = (function() {
                     current.textContent = "--"
                 }
             })
+        },
+
+        formatNumber: function(num, type){
+            let numSplit, int, dec, typeOfExp;
+            /*
+            + or - before number
+            * exactly 2 decimal points
+            comma separating thousands
+            * */
+
+            num = Math.abs(num);
+            num = num.toFixed(2);
+
+            numSplit = num.split('.');
+
+            int = numSplit[0];
+            if (int.length > 3) {
+                int = int.substr(0, int.length - 3) + ',' + int.substr(int.length - 3, 3); //input 23510, output 23,510
+            }
+
+            dec = numSplit[1];
+
+            return (type === 'exp' ? '-' : '+') + ' ' + int + '.' + dec;
+
         },
 
         // pass them down to controller
