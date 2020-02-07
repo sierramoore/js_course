@@ -171,6 +171,40 @@ const UIController = (function() {
         percentageLabel: '.budget__expenses--percentage',
         container: '.container', // container of all inc and exp list
         expensesPercLabel: '.item__percentage',
+        dateLabel: '.budget__title--month'
+    };
+
+
+    const formatNumber = function(num, type){
+        let numSplit, int, dec;
+        /*
+        + or - before number
+        * exactly 2 decimal points
+        comma separating thousands
+
+        ex 2310.4567 -> + 2,310.46
+        * */
+
+        num = Math.abs(num);
+        num = num.toFixed(2); // to only put 2 decimals
+
+        numSplit = num.split('.');// split into decimal part and non decimal part
+
+        int = numSplit[0]; //non decimal part of num
+
+        if (int.length > 3) {
+            int = int.substr(0, int.length - 3) + ',' + int.substr(int.length - 3, 3); //start from end of num and go minus 3 spaces and add comma
+        }
+
+        dec = numSplit[1]; // decimal part of num
+
+        return (type === 'exp' ? '-' : '+') + ' ' + int + '.' + dec; // and minus or plus sign for inc or exp
+    };
+
+    const nodeListForEach = function(nodeList, callback) {
+        for(let i=0; i < nodeList.length; i++) { //node list doesnt have methods but has length prop
+            callback(nodeList[i], i); //declaring this callback to have 2 future arguments. will expect to be passed 1-element and 2-index of it
+        }
     };
 
     return {
@@ -198,7 +232,7 @@ const UIController = (function() {
             //replace the placeholder text w some actual data
             newHtml = html.replace('%id%', obj.id);// first what to replace, then with what and we want the id number
             newHtml = newHtml.replace('%description%', obj.description);
-            newHtml = newHtml.replace('%value%', obj.value);
+            newHtml = newHtml.replace('%value%', formatNumber(obj.value, type));
 
             // insert html into dom
             document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
@@ -233,9 +267,12 @@ const UIController = (function() {
 
         // need to get obj data to display it (from getBudget)
         displayBudget: function(obj){
-            document.querySelector(DOMstrings.budgetLabel).textContent = obj.budget;
-            document.querySelector(DOMstrings.incomeLabel).textContent = obj.totalInc;
-            document.querySelector(DOMstrings.expensesLabel).textContent = obj.totalExp;
+            let type;
+            obj.budget > 0 ? type = 'inc' : 'exp';
+
+            document.querySelector(DOMstrings.budgetLabel).textContent = formatNumber(obj.budget, type);
+            document.querySelector(DOMstrings.incomeLabel).textContent = formatNumber(obj.totalInc, 'inc');
+            document.querySelector(DOMstrings.expensesLabel).textContent = formatNumber(obj.totalExp, 'exp');
 
             //control for -1 percentage case
             if(obj.percentage > 0) {
@@ -249,11 +286,6 @@ const UIController = (function() {
             const fields = document.querySelectorAll(DOMstrings.expensesPercLabel); // fields holds node list
 
             // make reusable for other nodes --similar to forEach for arrays but for nodelist
-            const nodeListForEach = function(nodeList, callback) {
-                for(let i=0; i < nodeList.length; i++) { //node list doesnt have methods but has length prop
-                    callback(nodeList[i], i); //declaring this callback to have 2 future arguments. will expect to be passed 1-element and 2-index of it
-                }
-            };
 
             nodeListForEach(fields, function(current, index) { // node list and looper
                 if(percentages[index] > 0) {
@@ -264,28 +296,28 @@ const UIController = (function() {
             })
         },
 
-        formatNumber: function(num, type){
-            let numSplit, int, dec, typeOfExp;
-            /*
-            + or - before number
-            * exactly 2 decimal points
-            comma separating thousands
-            * */
+        displayMonth: function(){
+            let now, year, month;
+            months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-            num = Math.abs(num);
-            num = num.toFixed(2);
+            now = new Date();
+            year = now.getFullYear();
+            month = now.getMonth();
+            document.querySelector(DOMstrings.dateLabel).textContent = months[month] + ' ' +year;
+        },
 
-            numSplit = num.split('.');
+        changeType: function (){
+            // on change on input + or - change outline focus color for input boxes
+            const fields = document.querySelectorAll( // selecting all input boxes
+                DOMstrings.inputType + ',' +
+                DOMstrings.inputDescription + ',' +
+                DOMstrings.inputValue
+            );
 
-            int = numSplit[0];
-            if (int.length > 3) {
-                int = int.substr(0, int.length - 3) + ',' + int.substr(int.length - 3, 3); //input 23510, output 23,510
-            }
-
-            dec = numSplit[1];
-
-            return (type === 'exp' ? '-' : '+') + ' ' + int + '.' + dec;
-
+            nodeListForEach(fields, function(cur){ //loop  over input elements
+                cur.classList.toggle('red-focus');
+            })
+            document.querySelector(DOMstrings.inputBtn).classList.toggle('red')
         },
 
         // pass them down to controller
@@ -313,7 +345,9 @@ const controller = (function(budgetCtrl, UICtrl) {
         });
 
         // add event to the container instead of each inc or exp element itself
-        document.querySelector(DOM.container).addEventListener('click', ctrlDeleteItem)
+        document.querySelector(DOM.container).addEventListener('click', ctrlDeleteItem);
+
+        document.querySelector(DOM.inputType).addEventListener('change', UICtrl.changeType);
     };
 
     const updateBudget = function () {
@@ -399,6 +433,8 @@ const controller = (function(budgetCtrl, UICtrl) {
         init: function() {
             console.log('app is running');
             //  set all values to 0 at start
+
+            UICtrl.displayMonth();
             UICtrl.displayBudget({
                 budget: 0,
                 totalInc: 0,
