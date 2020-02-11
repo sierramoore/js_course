@@ -75,5 +75,48 @@ console.log(`This is ${firstName} ${lastName}. He was born in ${yearOfBirth}. To
 }
 * var friends = ['Bob', 'Jane', 'Mark'];
 new Person('John').myFriends5(friends);
+*
+*
+*
+* // Array.from(nodeList) -> to apply array methods on selected node lists
+*
+* continue keyword -> continue iterateing thru loop  if condition is true
+*
+*
+* //ES6 for loop -> 'for of loop'
+* for (const i of anArray) {
+    if (i.className.includes('blue')) {
+        continue;
+    }
+    i.textContent = 'I changed to blue!';
+}
+*
+* // find Array method -> loops over array and finds condition you set
+* //  findIndex Array method -> same as find but for index number
+*
+* SPREAD OPERATOR ...
+* gathers of iterable items
+* used in a function call
+* works on Arrays, strings, nodeLists..
+*
+* REST PARAMETERS ...
+* like spread but used in function declaration to accept multiple parameters
+*
+*
+* DEFAULT PARAMETERS
+* in ES6 function constuctor can assign a default param directly to param (instead of needing if else)
+*
+* ~ EX ~
+* function SmithPerson(firstName, yearOfBirth, lastName = 'Smith', nationality = 'american') {
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.yearOfBirth = yearOfBirth;
+    this.nationality = nationality;
+}
+*
+*
+* MAP key:value data structure
+*
+*
 * */
 
