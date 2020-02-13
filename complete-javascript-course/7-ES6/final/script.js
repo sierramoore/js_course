@@ -486,8 +486,8 @@ for (let [key, value] of question.entries()) {
     }
 }
 
-const ans = parseInt(prompt('Write the correct answer'));
-console.log(question.get(ans === question.get('correct')));
+const ans = parseInt(prompt('Write the correct answer')); //storing input
+console.log(question.get(ans === question.get('correct'))); //compare input to correct key which has number 3 which is correct
 */
 
 
