@@ -146,18 +146,17 @@ All the report data should be printed to the console.
 
 HINT: Use some of the ES6 features: classes, subclasses, template strings, default parameters, maps, arrow functions, destructuring, etc.
 * */
-
+/*
 const parks = new Map();
-parks.set('Roma Park', 2015);
-parks.set('Anatomy Park', 2010);
-parks.set('Guell Park', 1980);
+parks.set('Roma Park', 2015, 1033);
+parks.set('Anatomy Park', 2010, 21);
+parks.set('Guell Park', 1980, 82);
 
 const streets = new Map();
-streets.set('Tamrit', 2019);
-streets.set('Parallel', 2000);
-streets.set('Diagonal', 1970);
-streets.set('Gracia', 1920);
-
+streets.set('Tamrit', 2019, 'tiny');
+streets.set('Parallel', 2000, 'normal');
+streets.set('Diagonal', 1970, 'big');
+streets.set('Gracia', 1920, 'huge');
 
 treeDensity = () => {
     console.log(streets.size / parks.size);
@@ -167,40 +166,96 @@ treeDensity = () => {
 avParkAge = () => {
     let avParkYears = 0;
 
-    for(let [keys, values] of parks.entries()){
+    for(let values of parks.entries()){
         avParkYears += values;
     }
     console.log(avParkYears / parks.size);
 };
 avParkAge();
 
-/**/
+mostTrees = () =>{
+    for(let values of parks.entries()){
+        console.log(values);
+    }
+};
+*/
 
-// class Town {
-//     constructor(parks, streets){
-//         this.parks = parks;
-//         this.streets = streets;
+// class Parks {
+//     constructor(name, year, trees){
+//         this.name = name;
+//         this.year = year;
+//         this.trees = trees;
 //     }
-//     parks = new Map();
-//     streets = new Map();
-//
-//     avParkAge() {
+//     avParkAge = () => {
 //         let avParkYears = 0;
-//         for(let values of parks.entries()){
-//             avParkYears += values;
+//         for(let i=0; i <= this.years.length; i++) {
+//             avParkYears += this.years[i];
 //         }
-//         console.log(avParkYears / parks.size);
-//     };
-//
-//     treeDensity() {
-//         console.log(streets.size / parks.size);
 //     };
 // }
+// class Streets extends Parks {
+//     constructor(name, year, size){
+//         super(name, year);
+//         this.name = name;
+//         this.year = year;
+//         this.size = size;
+//     }
+// }
+//
+// const park1 = new Park('Roma Park', 2015, 1033);
+// const park2 = new Park('Anatomy Park', 2010, 21);
+// const park3 = new Park('Guell Park', 1980, 82);
+//
+// const street1 = new Streets('Tamrit', 2019, 'tiny');
+// const street2 = new Streets('Parallel', 2000, 'normal');
+// const street3 = new Streets('Diagonal', 1970, 'big');
+// const street4 = new Streets('Gracia', 1920, 'huge');
 
+const parks = {
+    name: ['Roma Park', 'Anatomy Park', 'Guell Park'],
+    years: [2015, 2010, 1980],
+    trees: [1033, 21, 82],
+    area: [2500, 2800, 3200],
+    avParkAge() {
+        let avParkYears = 0;
+        for(let i=0; i <= this.years.length - 1; i++) {
+            avParkYears += this.years[i];
+        }
+        console.log(avParkYears / this.years.length)
+    },
+    mostTreesPark(){
+        //log if more or equal than 1000 trees
+        for(let i=0; i <= this.trees.length - 1; i++) {
+            if(this.trees[i] >= 1000){
+                console.log(this.name[i])
+            }
+        }
+    },
+    treeDensity() {
+        //tree density per park area
+        for(let i=0; i <= this.trees.length - 1; i++) {
 
+        }
+    }
+};
+parks.avParkAge();
+parks.mostTreesPark();
+parks.treeDensity();
 
-
-
+const streets = {
+    name: ['Tamrit', 'Parallel', 'Diagonal', 'Gracia'],
+    years: [2019, 2000, 1970, 1920],
+    size: ['tiny', 'normal', 'big', 'huge'],
+    length: [3800, 4200, 2100, 4500],
+    avLength(){
+        totalLength = 0;
+        for(let i=0; i <= this.length.length - 1; i++) {
+            totalLength += this.length[i];
+        }
+        console.log(totalLength / this.length.length);
+    }
+};
+streets.avLength();
 
 
 
