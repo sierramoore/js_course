@@ -658,13 +658,14 @@ class Park extends Element {
 
 
 class Street extends Element {
-    constructor(name, buildYear, length, size = 3) {
+    constructor(name, buildYear, length, size = 3) { //using default param for size (if no size specified it will automatically be set to 3)
         super(name, buildYear);
         this.length = length;
         this.size = size;
     }
     
     classifyStreet () {
+        // can add more data to our Street in a function with map
         const classification = new Map();
         classification.set(1, 'tiny');
         classification.set(2, 'small');
@@ -687,8 +688,8 @@ const allStreets = [new Street('Ocean Avenue', 1999, 1.1, 4),
 
 
 function calc(arr) {
-    
-    const sum = arr.reduce((prev, cur, index) => prev + cur, 0);
+    // 0 starts for prev value
+    const sum = arr.reduce((prev, cur, index) => prev + cur, 0); //sums previous el with next el
     
     return [sum, sum / arr.length];
     
@@ -696,7 +697,7 @@ function calc(arr) {
 
 
 function reportParks(p) {
-    
+    // p is for parks
     console.log('-----PARKS REPORT-----');
     
     // Density
@@ -715,7 +716,7 @@ function reportParks(p) {
 
 
 function reportStreets(s) {
-    
+    // s is for streets
     console.log('-----STREETS REPORT-----');
     
     //Total and average length of the town's streets

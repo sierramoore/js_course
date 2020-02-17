@@ -211,6 +211,7 @@ mostTrees = () =>{
 // const street3 = new Streets('Diagonal', 1970, 'big');
 // const street4 = new Streets('Gracia', 1920, 'huge');
 
+/*
 const parks = {
     name: ['Roma Park', 'Anatomy Park', 'Guell Park'],
     years: [2015, 2010, 1980],
@@ -256,6 +257,7 @@ const streets = {
     }
 };
 streets.avLength();
+*/
 
 
 
