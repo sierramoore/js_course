@@ -70,21 +70,21 @@
         getRecipe();
          */
 
-        const getIDS = new Promise((resolve, reject) => {
-            setTimeout(() =>{
-                resolve([523, 883, 432, 974]); //want to return this data
-            }, 1500)
-        });
-
-
-        // then is the callback to execute when the Promise is resolved
-        getIDS
-        .then(IDs => { //has the result of the successful promise (resolve)
-            console.log(IDs)
-        })
-        .catch(error => { //has result of unsuccessful promise (reject)
-            console.log(error)
-        });
+        // const getIDS = new Promise((resolve, reject) => {
+        //     setTimeout(() =>{
+        //         resolve([523, 883, 432, 974]); //want to return this data
+        //     }, 1500)
+        // });
+        //
+        //
+        // // then is the callback to execute when the Promise is resolved
+        // getIDS
+        // .then(IDs => { //has the result of the successful promise (resolve)
+        //     console.log(IDs)
+        // })
+        // .catch(error => { //has result of unsuccessful promise (reject)
+        //     console.log(error)
+        // });
 
 
         // AWAIT can only be used in ASYNC function
@@ -102,6 +102,19 @@
         //     return recipe;
         // }
 
+
+        String.prototype.repeatify = String.prototype.repeatify || function(times)  {
+            var str = '';
+            // console.log(this)
+
+            for (var i = 0; i < times; i++) {
+                console.log(this)
+                str += this;
+            }
+
+            return str;
+        };
+        console.log('hello'.repeatify(3));
 
     </script>
 </body>
