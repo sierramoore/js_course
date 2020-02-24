@@ -4,5 +4,6 @@
 // npm install --save babel-polyfill@6
 
 import num from './test';
+const x = 23;
 
-console.log(`imported ${num} from test.js`);
+console.log(`imported ${num} from test.js. variable x ix ${x}`);
