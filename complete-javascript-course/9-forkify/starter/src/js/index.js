@@ -5,4 +5,4 @@
 
 import num from './test';
 
-console.log(`imported ${num} from other module`);
+console.log(`imported ${num} from test.js`);
