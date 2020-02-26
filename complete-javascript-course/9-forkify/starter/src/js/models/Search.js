@@ -1,9 +1,3 @@
-//default export -> for one thing
-// export default 'I am an exported string';
-
-//in future recipie file
-//const res = await axios(`https://forkify-api.herokuapp.com/api/get?rId=${this.id}`);
-
 import axios from 'axios';
 
 

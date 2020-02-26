@@ -1,13 +1,7 @@
 //global controller
-
-// named imports for specific things
-// can use differnt name for imported items with 'as' keyword
-// import {add, multiply as m, ID} from './views/searchView';
-// console.log(`using imported functions ${add(ID, 2)} and ${m(3,5)}`);
-
 import Search from './models/Search';
 import * as searchView from './views/searchView';
-import {elements} from './views/base';
+import {elements, renderLoader, clearLoader} from './views/base';
 
 //want ALL of our current state data in one obj
 /* global state of app
@@ -30,11 +24,13 @@ const controlSearch = async () => {
         // 3 prepare ui for results
         searchView.clearInput();
         searchView.clearResults();
+        renderLoader(elements.searchRes);// arg is html parent container
 
-        // 4 search for recipies
+        // 4 search for recipes
         await state.search.getResults(); // have access to anything inside search obj
 
         // 5 render results on ui
+        clearLoader();
         searchView.renderResults(state.search.result)
     }
 };
@@ -44,5 +40,4 @@ elements.searchForm.addEventListener('submit', (e) =>{
     controlSearch();
 });
 
-// search.getResults('pizza');
 
