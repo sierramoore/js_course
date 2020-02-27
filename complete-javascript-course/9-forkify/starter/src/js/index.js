@@ -40,4 +40,16 @@ elements.searchForm.addEventListener('submit', (e) =>{
     controlSearch();
 });
 
+// use event delegation when you want to attach something like an event listener to something that hasnt come into our page yet. attach event to a common ancenstor
+elements.searchRes.addEventListener('click', e => {
+    const btn = e.target.closest('.btn-inline'); // closest find closest element. finds itself or matching ancestor. in this case, span, a, icon will all be selected as button
+
+    if(btn) {
+        const goToPage = parseInt(btn.dataset.goto, 10); //added data-goto attr in btn used for page number. radix 10 is 0-9
+        searchView.clearResults(); // clear results to not add to current page
+        searchView.renderResults(state.search.result, goToPage); // show next page of results
+        console.log(goToPage);
+    }
+});
+
 

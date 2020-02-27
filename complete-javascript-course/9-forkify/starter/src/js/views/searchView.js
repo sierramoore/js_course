@@ -7,7 +7,8 @@ export const clearInput = () => {
 };//wrap in braces to not return
 
 export const clearResults = () => {
-    elements.searchResList.innerHTML = '';
+    elements.searchResList.innerHTML = ''; // clear results list
+    elements.searchResPages.innerHTML = ''; // clear buttons
 };
 
 
@@ -50,7 +51,55 @@ const renderRecipe = recipe => {
             </li>`;
     elements.searchResList.insertAdjacentHTML('beforeend', markup);
 };
+// type: prev or next
+const createButton = (page, type) => {
+    return(
+        // increment or decrement page number
+        `<button class="btn-inline results__btn--${type}" data-goto=${type === 'prev' ? page - 1 : page + 1}>
+          <span>Page ${type === 'prev' ? page - 1 : page + 1}</span>
+          <svg class="search__icon">
+              <use href="img/icons.svg#icon-triangle-${type === 'prev' ? 'left' : 'right'}"></use>
+           </svg>
+    </button>`
+    )
 
-export const renderResults = (recipes) =>{
-    recipes.forEach(renderRecipe);
 };
+// implicit return if no block {}
+
+const renderButtons = (page, numResults, resPerPage) => {
+    const pages = Math.ceil(numResults / resPerPage);
+
+    let button;
+    if(page === 1 && pages > 1) {
+        //only next btn
+        button = createButton(page, 'next');
+    } else if (page < pages) {
+        // both next and prev btns
+        button = `
+        ${createButton(page, 'prev')}
+        ${createButton(page, 'next')}
+        `;
+    }
+    else if (page === pages && pages > 1) {
+        //only prev btn
+        button = createButton(page, 'prev');
+    }
+
+    elements.searchResPages.insertAdjacentHTML('afterbegin', button);
+};
+
+export const renderResults = (recipes, page = 1, resultPerPage = 10) =>{
+    /*
+    * page 1 will be (1 - 1) * 10
+    * page 2 will be (2 - 1) * 10 -> showing second set of 10 items
+    * and so on..
+    * */
+    const start = (page - 1) * resultPerPage;
+    const end = page * resultPerPage;
+
+    recipes.slice(start, end).forEach(renderRecipe); //recipes is arr of all recipes. looping over each and rendering in side panel
+
+    //render btns
+    renderButtons(page, recipes.length, resultPerPage);
+};
+
