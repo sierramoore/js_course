@@ -39,15 +39,43 @@ export default class Recipe {
         const unitShort = ['tbsp', 'tbsp','oz', 'oz', 'tsp', 'tsp', 'cup', 'pound'];
 
         const newIngredients = this.ingredients.map(el => {
-            // uniform units (loops over all ingredients and converts to abreviated)
+            // 1 uniform units (loops over all ingredients and converts to abreviated)
             let ingredient = el.toLocaleLowerCase();
             unitsLong.forEach((unit, i) => {
                 ingredient = ingredient.replace(unit, unitShort[i]);
-            })
+            });
 
-            //remove parentheses
+            // 2 remove parentheses
+            // regEx regular expression start and end with /\ used to match string/letter patterns
+            ingredient = ingredient.replace(/ *\([^]*\) */g, " ");
 
-            // parse ingredients into count, unit, and ingredients
+            // 3 parse ingredients into count, unit, and ingredients
+            // is there a unit in the ingredient li? if so where?
+            const arrIng = ingredient.split(' '); //seperate words
+            const unitIndex = arrIng.findIndex(el2 => unitsShort.includes(el2)); // is elem in arr? returns index if true
+
+            let objIng;
+            if (unitIndex > -1) {
+                //if unitShort word isnt there
+
+            } else if (parseInt(arrIng[0],10)) { //if (word in ingredient) can be converted to a num it will return number else go below
+                // there is NO unit but 1st elem is a number
+                objIng = {
+                    count: parseInt(arrIng[0],10),
+                    unit: '',
+                    ingredient: arrIng.slice(1).join(' ') //entire arr execpt 1st elem
+                }
+
+            } else if(unitIndex === -1){
+                // there is NO unit and NO number in 1st position
+                objIng = {
+                    count: 1,
+                    unit: '',
+                    ingredient //implicitly set to ingredient itself
+                }
+            }
+
+            return ingredient;
         });
 
         this.ingredients = newIngredients;
