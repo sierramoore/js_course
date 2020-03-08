@@ -17,8 +17,7 @@ const state= {};
 //async functions return promises
 const controlSearch = async () => {
     // 1 get seach input from view
-    // const query = searchView.getInput();
-    const query = 'pizza';
+    const query = searchView.getInput();
 
     if (query) {
         // 2 new seach obj and add to state
@@ -48,14 +47,6 @@ elements.searchForm.addEventListener('submit', (e) =>{
     controlSearch();
 });
 
-//testing//
-window.addEventListener('load', (e) =>{
-    e.preventDefault();
-    controlSearch();
-});
-//
-// ^^ testing ^^//
-
 // use event delegation when you want to attach something like an event listener to something that hasnt come into our page yet. attach event to a common ancenstor
 elements.searchRes.addEventListener('click', e => {
     const btn = e.target.closest('.btn-inline'); // closest find closest element. finds itself or matching ancestor. in this case, span, a, icon will all be selected as button
@@ -77,15 +68,15 @@ const controlRecipe = async () => {
     if (id) {
         // prepare UI for changes
 
-        // change new recipe obj
+        // create new recipe obj
         state.recipe = new Recipe(id);
 
-        // testing
-        window.r = state.recipe; //expose to global window obj
 
         try {
             // get recipe data
             await state.recipe.getRecipe();
+            // parse ingredients
+            state.recipe.parseIngredients();
 
             // calc servings
             state.recipe.calcTime();
