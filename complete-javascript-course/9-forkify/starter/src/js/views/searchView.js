@@ -11,6 +11,17 @@ export const clearResults = () => {
     elements.searchResPages.innerHTML = ''; // clear buttons
 };
 
+export const highlightSelected = id => {
+    const resultsArr = Array.from(document.querySelectorAll('.results__link')); // grab the search items
+
+    resultsArr.forEach(el => { // remove active class if not active
+        el.classList.remove('results__link--active')
+    });
+
+    // selected recipe has the id meaning its being displayed currently
+    document.querySelector(`a[href="#${id}"]`).classList.add('results__link--active')
+};
+
 
 /* 'Pasta with tomato and spinach'
 * acc: 0 / acc + cur.length = 5 / newTitle = ['Pasta']
