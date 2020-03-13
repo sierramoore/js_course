@@ -1,8 +1,10 @@
 //global controller
 import Search from './models/Search';
 import Recipe from './models/Recipe';
+import List from './models/List';
 import * as searchView from './views/searchView';
 import * as recipeView from './views/recipeView';
+import * as listView from './views/listView';
 import {elements, renderLoader, clearLoader} from './views/base';
 
 
@@ -14,6 +16,7 @@ import {elements, renderLoader, clearLoader} from './views/base';
 * liked recipies
 * */
 const state= {};
+window.state = state;
 
 //async functions return promises
 const controlSearch = async () => {
@@ -106,6 +109,41 @@ const controlRecipe = async () => {
 // to add multiple events with same callback
 ['hashchange', 'load'].forEach(event => window.addEventListener(event, controlRecipe));
 
+/*
+* LIST CONTROLLER
+* */
+const controlList = () => {
+    // create a new list IF there is none yet
+    if(!state.list) state.list = new List();
+
+    // add each ingredient to the shopping list and UI
+    state.recipe.ingredients.forEach(el => {
+        const item = state.list.addItem(el.count, el.unit, el.ingredient);
+        listView.renderItem(item);
+    })
+
+};
+
+// handle deleteand update list item events
+elements.shopping.addEventListener('click', e => {
+   //get id
+   const id = e.target.closest('.shopping__item').dataset.itemid;
+
+   // handle delete btn
+    if(e.target.matches('.shopping__delete, .shopping__delete *')) {
+        // delete from state
+        state.list.deleteItem(id);
+
+        // delete from UI
+        listView.deleteItem(id);
+
+    //handle count update
+    } else if (e.target.matches('.shopping__count--value')){
+        const value = parseFloat(e.target.value, 10);
+        state.list.updateCount(id, value);
+    }
+});
+
 // handling recipe btn clicks
 // + or - servings
 elements.recipe.addEventListener('click', e => {
@@ -120,5 +158,10 @@ elements.recipe.addEventListener('click', e => {
         // increment btn
         state.recipe.updateServings('inc');
         recipeView.updateServingsIngredients(state.recipe);
+    } else if (e.target.matches('.recipe__btn--add, recipe__btn--add *')) {
+        controlList();
     }
 });
+
+
+window.l = new List();
