@@ -95,4 +95,16 @@ export default class Recipe {
         });
         this.ingredients = newIngredients;
     }
+
+    updateServings (type) { // type means + or -
+        // Servings
+        const newServings = type === 'dec' ? this.servings - 1 : this.servings + 1; // if type is - subtract 1 else add 1
+
+        // Ingredients
+        this.ingredients.forEach(ing => { //update all ingredident amounts for amount of servings(ppl eating)
+            ing.count *= (newServings / this.servings)
+        });
+
+        this.servings = newServings;
+    }
 }

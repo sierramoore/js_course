@@ -105,3 +105,20 @@ const controlRecipe = async () => {
 
 // to add multiple events with same callback
 ['hashchange', 'load'].forEach(event => window.addEventListener(event, controlRecipe));
+
+// handling recipe btn clicks
+// + or - servings
+elements.recipe.addEventListener('click', e => {
+    if(e.target.matches('.btn-decrease, .btn-decrease *')){ // * = any child of it
+        // decrement btn
+        if(state.recipe.servings > 1) {
+            state.recipe.updateServings('dec');
+            recipeView.updateServingsIngredients(state.recipe);
+        }
+
+    } else if (e.target.matches('.btn-increase, .btn-increase *')) {
+        // increment btn
+        state.recipe.updateServings('inc');
+        recipeView.updateServingsIngredients(state.recipe);
+    }
+});
