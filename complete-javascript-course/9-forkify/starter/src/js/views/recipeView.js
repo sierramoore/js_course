@@ -10,6 +10,7 @@ const formatCount = count => {
     if (count) { //bc some may b undefined
         // count = 2.5 -> 5/2 -> 2 1/2
         // count = 0.5 -> 1/2
+        // const newCount = Math.round(count + 10000) / 10000;
         const [int, dec] = count.toString().split('.').map(el => parseInt(el, 10)); // seperate the whole number (int) and the decimal value (dec)
 
         if (!dec) return count; // if only whole number just return it
