@@ -78,7 +78,7 @@ new Person('John').myFriends5(friends);
 *
 *
 *
-* // Array.from(nodeList) -> to apply array methods on selected node lists
+* // Array.from(nodeList) -> to apply array methods on selected node-laptop lists
 *
 * continue keyword -> continue iterateing thru loop  if condition is true
 *

@@ -202,7 +202,7 @@ const UIController = (function() {
     };
 
     const nodeListForEach = function(nodeList, callback) {
-        for(let i=0; i < nodeList.length; i++) { //node list doesnt have methods but has length prop
+        for(let i=0; i < nodeList.length; i++) { //node-laptop list doesnt have methods but has length prop
             callback(nodeList[i], i); //declaring this callback to have 2 future arguments. will expect to be passed 1-element and 2-index of it
         }
     };
@@ -283,11 +283,11 @@ const UIController = (function() {
         },
 
         displayPercentages: function (percentages) { //param will b an array of all %
-            const fields = document.querySelectorAll(DOMstrings.expensesPercLabel); // fields holds node list
+            const fields = document.querySelectorAll(DOMstrings.expensesPercLabel); // fields holds node-laptop list
 
             // make reusable for other nodes --similar to forEach for arrays but for nodelist
 
-            nodeListForEach(fields, function(current, index) { // node list and looper
+            nodeListForEach(fields, function(current, index) { // node-laptop list and looper
                 if(percentages[index] > 0) {
                     current.textContent = percentages[index] + '%';
                 } else {
